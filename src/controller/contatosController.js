@@ -25,13 +25,13 @@ const getByNome = (request, response) => {
     if (error) {
       return response.status(500).send(error)
 
-    } else{
-      if (contatos.length > 0) {
-      return response.status(201).send(contatos)
     } else {
-      return response.status(500).send("contato não encontrado")
+      if (contatos.length > 0) {
+        return response.status(201).send(contatos)
+      } else {
+        return response.status(500).send("contato não encontrado")
+      }
     }
-  }
   })
 }
 
@@ -65,14 +65,42 @@ const getAll = (request, response) => {
 
 const deleteID = (request, response) => {
   const idParams = request.params.id
-  contatosCollection.findByIdAndDelete (idParams, (error, contato) => {
-    if(error){
+  contatosCollection.findByIdAndDelete(idParams, (error, contato) => {
+    if (error) {
       return response.status(500).send(error)
     } else {
       return response.sendStatus(200)
     }
   })
 }
+
+const UpdateId = (request, response) => {
+  const idParams = request.params.id
+  const reqBody = request.body
+  const options = {new: true}
+  contatosCollection.findByIdAndUpdate(idParams, { $set: reqBody },options, (error, contato) => {
+    if (error) {
+      return response.status(500).send(error)
+    } else {
+      if (contato) {
+        return response.status(200).send(contato)
+      } else {
+        return response.sendStatus(404)
+      }
+    }
+  })
+}
+
+module.exports = {
+  getAll,
+  getByNome,
+  getById,
+  add,
+  deleteID,
+  UpdateId
+}
+
+
 
 //     ANTIGO 
 //let contato = request.body
@@ -91,7 +119,7 @@ const deleteID = (request, response) => {
  }
  //amigo estou aqui
  
-}*/
+}
 
 function converterData(dataString) {
 
@@ -138,12 +166,5 @@ function saberSigno(contato) {
   console.log(pegarMes)
   console.log(pegarDia)
   return signo;
-}
+}*/
 
-module.exports = {
-  getAll,
-  getByNome,
-  getById,
-  add,
-  deleteID
-}

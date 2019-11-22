@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
-const database = require ('./model/database')
+const database = require ("./model/database")
+const bodyParser = require ("body-parser")
 database.connect()
 
 
@@ -17,7 +18,8 @@ app.use(function (request, response, next) {
   next()
 })
 
+
+app.use(bodyParser.json())
 app.use("/", index)
 app.use("/contatos", contatos)
-
 module.exports = app
